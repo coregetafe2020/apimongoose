@@ -95,10 +95,18 @@ app.put('/:_id', (req, res) => {
 
 })
 
+app.delete('/:_id', (req, res) => {
 
+    Producto.findByIdAndDelete(req.params._id, (err, producto) => {
+        if (err) {
+            return res.status(400).json({mensajeError: err})
+        }
+        res.status(200).json({
+            mensaje: `El producto ${producto.nombre} ha sido eliminado`
+        })
+    })
 
-
-
+})
 
 
 module.exports = app;

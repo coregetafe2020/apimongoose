@@ -2,8 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
 const producto = require('./routes/producto');
+const proveedor = require('./routes/proveedor');
 
 const opciones = {
     useNewUrlParser: true,
@@ -11,7 +15,9 @@ const opciones = {
     useCreateIndex: true
 }
 
-mongoose.connect('mongodb://localhost:27017/compras', opciones)
+const urlMongo = process.env.URLMONGO;
+
+mongoose.connect(urlMongo, opciones)
         .then(() => {
             console.log('Respuesta base datos ok')
         })
@@ -19,10 +25,14 @@ mongoose.connect('mongodb://localhost:27017/compras', opciones)
             console.log('Error conexión', err)
         })
 
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.use('/producto', producto);
+app.use('/proveedor', proveedor);
 
-app.listen(3000, () => {
-    console.log('Servidor escuchando en http://localhost:3000');
+const port = process.env.PORT;
+
+app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
 })
