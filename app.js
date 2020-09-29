@@ -7,7 +7,8 @@ const producto = require('./routes/producto');
 
 const opciones = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 }
 
 mongoose.connect('mongodb://localhost:27017/compras', opciones)
