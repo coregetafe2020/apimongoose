@@ -8,6 +8,7 @@ dotenv.config();
 const app = express();
 const producto = require('./routes/producto');
 const proveedor = require('./routes/proveedor');
+const usuario = require('./routes/usuario');
 
 const opciones = {
     useNewUrlParser: true,
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 
 app.use('/producto', producto);
 app.use('/proveedor', proveedor);
+app.use('/usuario', usuario);
 
 const port = process.env.PORT;
 
