@@ -9,6 +9,9 @@ const app = express();
 const producto = require('./routes/producto');
 const proveedor = require('./routes/proveedor');
 const usuario = require('./routes/usuario');
+const cors = require('cors');
+
+app.use(cors());
 
 const opciones = {
     useNewUrlParser: true,

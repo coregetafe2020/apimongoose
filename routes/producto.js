@@ -3,7 +3,7 @@ const app = express();
 const Producto = require('../models/producto');
 
 app.get('/', (req, res) => {
-    Producto.find({}).sort({nombre: 1}).select({nombre: 1}).exec((err, productos) => {
+    Producto.find({}).sort({nombre: 1}).select({nombre: 1, sku: 1}).exec((err, productos) => {
         if (err) {
             return res.status(400).json({mensajeError: err})
         }
