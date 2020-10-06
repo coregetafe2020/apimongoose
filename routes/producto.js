@@ -25,14 +25,16 @@ app.get('/:_id', (req, res) => {
 })
 
 app.get('/busqueda/:termino', (req, res) => {
-    Producto.find({nombre: {$regex: req.params.termino}}, (err, productos) => {
-        if (err) {
-            return res.status(400).json({mensajeError: err})
-        }
-        res.status(200).json({
-            productos: productos
-        })
-    })
+    Producto.find({nombre: {$regex: req.params.termino, $options: 'i'}})
+            .select({nombre: 1, sku: 1})
+            .exec((err, productos) => {
+                if (err) {
+                    return res.status(400).json({mensajeError: err})
+                }
+                res.status(200).json({
+                    productos: productos
+                })
+            })
 })
 
 app.post('/', (req, res) => {
@@ -53,8 +55,7 @@ app.post('/', (req, res) => {
             }
             return res.status(400).json({
                 mensajeError: mensajeError,
-                code: "11000",
-                link: "https://github.com/apimongoose/error11000"
+                error: err
             })
         }
         res.status(200).json({
@@ -84,12 +85,13 @@ app.put('/:_id', (req, res) => {
         actualizacion.proveedor = req.body.proveedor;
     }
 
-    Producto.findByIdAndUpdate(req.params._id, {$set: actualizacion}, (err, producto) => {
+    Producto.findOneAndUpdate({_id: req.params._id}, {$set: actualizacion}, {new: true}, (err, productoRes) => {
         if (err) {
             return res.status(400).json({mensajeError: err})
         }
+        console.log(productoRes)
         res.status(200).json({
-            mensaje: `El producto ${producto.nombre} ha sido actualizado`
+            mensaje: `El producto ${productoRes.nombre} ha sido actualizado`
         })
     })
 
